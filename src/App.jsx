@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <div>
-        <h1>SREE</h1>
+        <h1>TODO</h1>
         <AddTodo/>
        <TodoItem/>
         </div>

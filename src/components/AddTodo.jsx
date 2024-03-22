@@ -1,18 +1,39 @@
-import React,{useState} from 'react'
-import {useDispatch} from 'react-redux'
+import React,{useEffect, useState} from 'react'
+import {useDispatch,useSelector} from 'react-redux'
 //import {useDispatch} from 'react-redux'
-import { addTodo } from '../Features/todo/todoSlice';
+import { addTodo, setActive,setDeactive, updateTodo } from '../Features/todo/todoSlice';
 function AddTodo() {
     const dispatch = useDispatch()
-    const [input, setInput] = useState('')
-
+    
+    var isActives=useSelector(state=>state.isActive)
+    const updatedTexts=useSelector(state=>state.updatedText)
+    const userIds=useSelector(state=>state.userId)
+    
+    const [input, setInput] = useState("")
+  console.log(updatedTexts);
     const handleSubmit=(e)=>{
         e.preventDefault();
         console.log("here");
-        setInput('')
+        if(isActives!==true)
         dispatch(addTodo(input));
+      else dispatch(updateTodo({id:userIds,text:input}))
+        setInput('')
+       // dispatch(setActive())
         
     }
+    useEffect(() => {
+      setInput(updatedTexts);
+    }, [userIds])
+    
+    console.log(isActives)
+    var flag=true;
+
+    
+   /*  if(isActive){
+      setInput(updatedText);
+      isActive=false;
+      dispatch(setDeactive())
+    } */
 
   return (
     <form  onSubmit={handleSubmit}className='s space-x-3 mt-12' >
@@ -27,8 +48,8 @@ function AddTodo() {
         </input>
         <button 
         type='submit'
-        className='text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
-            Add Todo
+        className={`text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg${isActives && ' bg-green-400 hover:bg-green-600'}`}>
+          {isActives?<>Update Todo</> : <>Add Todo</>}
         </button>
     </form>
   )
